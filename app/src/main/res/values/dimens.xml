@@ -1,0 +1,19 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- MainLoginActivity.java -->
+    <dimen name="loginactivity_main_title_fontsize">45dp</dimen>
+    <dimen name="loginactivity_main_title_vmargin">70dp</dimen>
+
+    <dimen name="loginactivity_main_et_hmargin">15dp</dimen>
+    <dimen name="loginactivity_main_et_vmargin">6dp</dimen>
+
+    <dimen name="loginactivity_main_button_layout_vmargin">20dp</dimen>
+    <dimen name="loginactivity_main_button_layout_hmargin">15dp</dimen>
+
+    <dimen name="loginactivity_main_button_hmargin">10dp</dimen>
+
+    <dimen name="loginactivity_main_forgotpwd_vmargin">10dp</dimen>
+</resources>

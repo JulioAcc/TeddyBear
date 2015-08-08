@@ -1,0 +1,26 @@
+<resources>
+    <string name="parse_app_id">8GUf1XUROlgJavX3NeUH1qnThfZkKNqMJW2Lk646</string>
+    <string name="parse_client_key">1EXB8y0FHsLkrrEFcFLlKTfeszqR9RmmmOBNULWH</string>
+    <string name="facebook_app_id">388582378004619</string>
+
+    <string name="app_name">Teddy Bear</string>
+
+    <string name="hello">Hello World!</string>
+    <string name="action_settings">Settings!</string>
+
+    <!-- MainLoginActivity.java -->
+    <string name="loginactivity_main_title_text">My teddy bear</string>
+
+    <string name="loginactivity_main_forgot_pwd"><u>Forgot password?</u></string>
+
+    <string name="loginactivity_main_facebook_login_button_label">Log in with Facebook</string>
+
+    <string name="loginactivity_main_signup_fail_empty_et">Please make sure you fill all the fields.</string>
+    <string name="loginactivity_main_signup_fail_passwords_match">Passwords do not match.</string>
+    <string name="loginactivity_main_signup_fail_password_rules">Password must have at least one digit, a lower case, an upper case,
+        a special character, and a minimun of 8 characters. No whitespaces allowed.</string>
+    <string name="loginactivity_main_signup_fail_valid_email">Email presented is not valid.</string>
+    <string name="loginactivity_main_signup_fail_valid_name">Names can only have letters, dots and underlines.</string>
+    <string name="loginactivity_main_signup_successful">Sign up successful!</string>
+    <string name="loginactivity_main_signup_failed_parse">Sign up failed. Please try again.</string>
+</resources>

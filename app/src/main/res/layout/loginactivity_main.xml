@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/loginactivity_main_title_text"
+        android:textSize="@dimen/loginactivity_main_title_fontsize"
+        android:textStyle="bold|italic"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/loginactivity_main_title_vmargin"
+        android:layout_marginTop="@dimen/loginactivity_main_title_vmargin"/>
+
+
+    <include layout="@layout/login_layout"></include>
+    <include layout="@layout/signup_layout"></include>
+    <include layout="@layout/logout_layout"></include>
+    <include layout="@layout/password_retrieval_layout"></include>
+
+</LinearLayout>

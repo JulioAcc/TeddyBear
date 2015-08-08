@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone"
+    android:id="@+id/loginactivity_main_signup_layout">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:textSize="22dp"
+        android:layout_marginTop="@dimen/loginactivity_main_et_vmargin"
+        android:layout_marginBottom="@dimen/loginactivity_main_et_vmargin"
+        android:layout_marginLeft="@dimen/loginactivity_main_et_hmargin"
+        android:layout_marginRight="@dimen/loginactivity_main_et_hmargin"
+        android:id="@+id/loginactivity_main_signup_email_et"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:textSize="22dp"
+        android:inputType="textPassword"
+        android:layout_marginTop="@dimen/loginactivity_main_et_vmargin"
+        android:layout_marginBottom="@dimen/loginactivity_main_et_vmargin"
+        android:layout_marginLeft="@dimen/loginactivity_main_et_hmargin"
+        android:layout_marginRight="@dimen/loginactivity_main_et_hmargin"
+        android:id="@+id/loginactivity_main_signup_password_et"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Re-enter password"
+        android:textSize="22dp"
+        android:inputType="textPassword"
+        android:layout_marginTop="@dimen/loginactivity_main_et_vmargin"
+        android:layout_marginBottom="@dimen/loginactivity_main_et_vmargin"
+        android:layout_marginLeft="@dimen/loginactivity_main_et_hmargin"
+        android:layout_marginRight="@dimen/loginactivity_main_et_hmargin"
+        android:id="@+id/loginactivity_main_signup_repassword_et"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        android:textSize="22dp"
+        android:layout_marginTop="@dimen/loginactivity_main_et_vmargin"
+        android:layout_marginBottom="@dimen/loginactivity_main_et_vmargin"
+        android:layout_marginLeft="@dimen/loginactivity_main_et_hmargin"
+        android:layout_marginRight="@dimen/loginactivity_main_et_hmargin"
+        android:id="@+id/loginactivity_main_signup_name_et"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text="Create account"
+        android:textSize="22dp"
+        android:layout_margin="15dp"
+        android:clickable="true"
+        android:onClick="submitSignupForm"/>
+
+</LinearLayout>
