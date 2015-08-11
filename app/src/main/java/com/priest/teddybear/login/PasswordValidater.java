@@ -29,7 +29,7 @@ public class PasswordValidater {
         }
 
         byte[] digest = md.digest();
-        return new String(digest, StandardCharsets.UTF_8);
+        return new String(digest);
     }
 
     public static String encryptPassword(String password, int hashCycles){
