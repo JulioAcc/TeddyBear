@@ -6,15 +6,32 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphRequestBatch;
+import com.facebook.GraphResponse;
+import com.parse.LogInCallback;
 import com.priest.teddybear.R;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+import com.priest.teddybear.lobby.Lobby;
+import com.priest.teddybear.parse.ParseConstants;
+import com.priest.teddybear.parse.ParseFriendList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Created by priest on 7/24/15.
@@ -22,6 +39,9 @@ import com.parse.SignUpCallback;
 
 public class MainLoginActivity extends Activity {
 
+    public static final String FACEBOOK_ID = "id";
+    public static final String FACEBOOK_NAME = "name";
+    public static final String FACEBOOK_EMAIL = "email";
 
     public static final int SIGNUP_LAYOUT = 0;
     public static final int LOGIN_LAYOUT = 1;
@@ -30,6 +50,8 @@ public class MainLoginActivity extends Activity {
 
     private LinearLayout signupLayout, loginLayout, logoutLayout, passwordRetrievalLayout;
     private EditText emailEditText, pwdEditText, repwdEditText, nameEditText;
+    private EditText loginEmailEditText, loginPwdEditText;
+    private ImageView profilePhotoImageView;
 
     private ParseUser parseUser;
 
@@ -49,67 +71,192 @@ public class MainLoginActivity extends Activity {
         repwdEditText = (EditText) findViewById(R.id.loginactivity_main_signup_repassword_et);
         nameEditText = (EditText) findViewById(R.id.loginactivity_main_signup_name_et);
 
-        parseUser = null;
-        try {
-            parseUser = ParseUser.getCurrentUser();
-        }catch(NullPointerException e){
-            e.printStackTrace();
-            Log.d("Error","Null pointer exception for currentUser");
-        }
+        loginEmailEditText = (EditText) findViewById(R.id.loginactivity_main_login_email_et);
+        loginPwdEditText = (EditText) findViewById(R.id.loginactivity_main_login_password_et);
 
-        if(parseUser != null){
-            setLayoutVisibility(LOGOUT_LAYOUT);
-        }else{
+        TextView testtest = (TextView) findViewById(R.id.testIdTESTTEST);
+
+        profilePhotoImageView = (ImageView) findViewById(R.id.profilePhotoImageView);
+
+        if(ParseUser.getCurrentUser().getObjectId() == null){
             setLayoutVisibility(LOGIN_LAYOUT);
-        }
-    }
-
-    public void submitSignupForm(View v){
-        String email = emailEditText.getText().toString();
-        String password = pwdEditText.getText().toString();
-        String repassword = repwdEditText.getText().toString();
-        String name = nameEditText.getText().toString();
-
-        if(email.equals("") || email==null || password.equals("") || password==null ||
-                repassword.equals("") || repassword==null || name.equals("") || name==null) {
-            Toast.makeText(this, R.string.loginactivity_main_signup_fail_empty_et, Toast.LENGTH_LONG);
         }else{
-            if(!FormValidater.validateEmail(email)){
-                Toast.makeText(this, R.string.loginactivity_main_signup_fail_valid_email, Toast.LENGTH_LONG);
-            }else if(!FormValidater.validatePassword(password) && !FormValidater.validatePassword(repassword)){
-                Toast.makeText(this, R.string.loginactivity_main_signup_fail_password_rules, Toast.LENGTH_LONG);
-            }else if(!(password.equals(repassword))){
-                Toast.makeText(this, R.string.loginactivity_main_signup_fail_passwords_match, Toast.LENGTH_LONG);
-            }else if(!FormValidater.validateName(name)){
-                Toast.makeText(this, R.string.loginactivity_main_signup_fail_valid_name, Toast.LENGTH_LONG);
-            }else{
-                signUpUser(email, password, name);
-            }
+            parseUser = ParseUser.getCurrentUser();
+            testtest.setText(parseUser.getEmail());
+            setLayoutVisibility(LOGOUT_LAYOUT);
         }
     }
 
-    public void signUpUser(String email, String password, String name){
-        ParseUser user = new ParseUser();
-        user.setUsername(name);
-        String hashPassword = PasswordValidater.encryptPassword(password, PasswordValidater.STANDARD_HASH_CYCLE);
-        user.setPassword(hashPassword);
-        user.setEmail(email);
+    public void facebookLogin(View v){
+        Collection<String> permissions = Arrays.asList("email", "public_profile", "user_friends");
 
-        user.signUpInBackground(new SignUpCallback() {
-            public void done(ParseException e) {
-                if (e == null) {
-                    Toast.makeText(getApplicationContext(), R.string.loginactivity_main_signup_successful, Toast.LENGTH_LONG);
-                    transitionToLoginLayoutAfterSignup();
+        ParseFacebookUtils.logInWithReadPermissionsInBackground(this, permissions, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException err) {
+                parseUser = user;
+                if (user == null) {
+                    Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
+                } else if (user.isNew()) {
+                    Log.d("MyApp", "User signed up and logged in through Facebook!");
+                    retrieveFacebookInformation();
+                    searchFriendsList();
+                    transitionToLobby();
                 } else {
-                    Toast.makeText(getApplicationContext(), R.string.loginactivity_main_signup_failed_parse, Toast.LENGTH_LONG);
+                    Log.d("MyApp", "User logged in through Facebook!");
+                    retrieveFacebookInformation();
+                    searchFriendsList();
+                    transitionToLobby();
                 }
             }
         });
     }
 
+    public void retrieveFacebookInformation() {
+
+        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+                try {
+                    String email = object.getString(FACEBOOK_EMAIL);
+                    String name = object.getString(FACEBOOK_NAME);
+                    String facebookId = object.getString(FACEBOOK_ID);
+                    LoadImageFromUrl loadImage = new LoadImageFromUrl(profilePhotoImageView, facebookId);
+                    loadImage.execute();
+                    signUpFacebookUser(email, name, facebookId);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id, name, email");
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
+
+    public void searchFriendsList(){
+
+        GraphRequestBatch batch = new GraphRequestBatch(GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(),
+                                                            new GraphRequest.GraphJSONArrayCallback() {
+            @Override
+            public void onCompleted(JSONArray objects, GraphResponse response) {
+                String[] facebookFriends = new String[objects.length()];
+                for(int i = 0; i < objects.length(); i++){
+                    JSONObject friend;
+                    try {
+                        friend = objects.getJSONObject(i);
+                        facebookFriends[i] = friend.getString("id");
+                        System.out.println("Friend #"+i+" -> "+ friend.getString("id") +" : "+ friend.getString("name"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                ParseFriendList.searchFacebookFriends(facebookFriends);
+            }
+        }));
+        batch.executeAsync();
+
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,link,picture");
+    }
+
+    public void submitSignupForm(View v) {
+        String email = emailEditText.getEditableText().toString();
+        String password = pwdEditText.getEditableText().toString();
+        String repassword = repwdEditText.getEditableText().toString();
+        String name = nameEditText.getEditableText().toString();
+
+        if (email.equals("") || email == null || password.equals("") || password == null ||
+                repassword.equals("") || repassword == null || name.equals("") || name == null) {
+            Toast.makeText(this, R.string.loginactivity_main_signup_fail_empty_et, Toast.LENGTH_LONG).show();
+        } else {
+            if (!FormValidater.validateEmail(email)) {
+                Toast.makeText(this, R.string.loginactivity_main_signup_fail_valid_email, Toast.LENGTH_LONG).show();
+            } else if (!FormValidater.validatePassword(password) && !FormValidater.validatePassword(repassword)) {
+                Toast.makeText(this, R.string.loginactivity_main_signup_fail_password_rules, Toast.LENGTH_LONG).show();
+            } else if (!(password.equals(repassword))) {
+                Toast.makeText(this, R.string.loginactivity_main_signup_fail_passwords_match, Toast.LENGTH_LONG).show();
+            } else if (!FormValidater.validateName(name)) {
+                Toast.makeText(this, R.string.loginactivity_main_signup_fail_valid_name, Toast.LENGTH_LONG).show();
+            } else {
+                signUpParseUser(email, password, name);
+            }
+        }
+    }
+
+    public void signUpParseUser(String email, String password, String name){
+        ParseUser user = new ParseUser();
+        user.put(ParseConstants.USER_CLASS_ATTRIBUTE_NAME, name);
+        String hashPassword = PasswordValidater.encryptPassword(password, PasswordValidater.STANDARD_HASH_CYCLE);
+        user.setPassword(hashPassword);
+        user.setEmail(email);
+        user.setUsername(email);
+
+        user.signUpInBackground(new SignUpCallback() {
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(getApplicationContext(), R.string.loginactivity_main_signup_successful, Toast.LENGTH_LONG).show();
+                    transitionToLoginLayoutAfterSignup();
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.loginactivity_main_signup_failed_parse, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    public void signUpFacebookUser(String email, String name, String facebookId){
+        try{
+            System.out.println(email + name + facebookId);
+            parseUser.put(ParseConstants.USER_CLASS_ATTRIBUTE_EMAIL, email);
+            parseUser.put(ParseConstants.USER_CLASS_ATTRIBUTE_NAME, name);
+            parseUser.put(ParseConstants.USER_CLASS_ATTRIBUTE_FACEBOOK_ID, facebookId);
+            parseUser.saveInBackground();
+        }catch(NullPointerException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void submitLoginForm(View v){
+        String email = loginEmailEditText.getEditableText().toString();
+        String password = loginPwdEditText.getEditableText().toString();
+
+        if (email.equals("") || email == null || password.equals("") || password == null) {
+            Toast.makeText(this, R.string.loginactivity_main_signup_fail_empty_et, Toast.LENGTH_LONG).show();
+        } else {
+            if (!FormValidater.validateEmail(email)) {
+                Toast.makeText(this, R.string.loginactivity_main_signup_fail_valid_email, Toast.LENGTH_LONG).show();
+            } else {
+                loginUser(email, password);
+            }
+        }
+    }
+
+    public void loginUser(String email, String password){
+        String hashPassword = PasswordValidater.encryptPassword(password, PasswordValidater.STANDARD_HASH_CYCLE);
+        ParseUser.logInInBackground(email, hashPassword, new LogInCallback() {
+            @Override
+            public void done(ParseUser parseUser, ParseException e) {
+                if (parseUser != null) {
+                    transitionToLobby();
+                } else {
+                    Log.e("LOGIN ERROR", e.getMessage());
+                }
+            }
+        });
+    }
+
+    public void logoutUser(View v){
+        ParseUser.logOut();
+        transitionToLoginLayoutAfterLogout();
+    }
+
     public void transitionToLoginLayoutAfterSignup(){
         setLayoutVisibility(LOGIN_LAYOUT);
-        //
+    }
+
+    public void transitionToLoginLayoutAfterLogout(){
+        setLayoutVisibility(LOGIN_LAYOUT);
     }
 
     public void transitionToSignupLayout(View v){
@@ -120,9 +267,9 @@ public class MainLoginActivity extends Activity {
         setLayoutVisibility(PASSWORD_RETRIEVAL_LAYOUT);
     }
 
-    public void transitionToLobby(View v){
-        //Intent menuIntent = new Intent(this, MenuActivity.class);
-        //startActivity(menuIntent);
+    public void transitionToLobby(){
+        Intent menuIntent = new Intent(this, Lobby.class);
+        startActivity(menuIntent);
     }
 
     public void setLayoutVisibility(int visibleLayout){
@@ -142,7 +289,7 @@ public class MainLoginActivity extends Activity {
                 logoutLayout.setVisibility(View.VISIBLE);
                 break;
             case PASSWORD_RETRIEVAL_LAYOUT:
-                logoutLayout.setVisibility(View.VISIBLE);
+                passwordRetrievalLayout.setVisibility(View.VISIBLE);
                 break;
         }
     }
