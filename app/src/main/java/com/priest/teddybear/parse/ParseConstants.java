@@ -22,15 +22,11 @@ public class ParseConstants {
     public final static String CLASS_ATTRIBUTE_OBJECT_ID = "objectId";
 
     //--------------------  ATTRIBUTES: USER CLASS
-
-    public final static String USER_CLASS_NAME = "_User";
-
-    public final static String USER_CLASS_ATTRIBUTE_USERNAME = "username";
     public final static String USER_CLASS_ATTRIBUTE_FACEBOOK_ID = "facebookId";
     public final static String USER_CLASS_ATTRIBUTE_EMAIL = "email";
     public final static String USER_CLASS_ATTRIBUTE_PROFILE_PICTURE = "profilePicture";
     public final static String USER_CLASS_ATTRIBUTE_NAME = "name";
     public final static String USER_CLASS_ATTRIBUTE_FRIENDS_LIST = "userFriendsList";
-    public final static String USER_CLASS_ATTRIBUTE_PASSWORD = "password";
+    public final static String USER_CLASS_ATTRIBUTE_STATUS_ONLINE = "statusOnline";
 
 }

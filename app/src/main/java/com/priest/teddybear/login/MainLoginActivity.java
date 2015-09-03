@@ -16,13 +16,13 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphRequestBatch;
 import com.facebook.GraphResponse;
 import com.parse.LogInCallback;
+import com.priest.teddybear.navdrawer.NavDrawerFragmentActivity;
 import com.priest.teddybear.R;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
-import com.priest.teddybear.lobby.Lobby;
 import com.priest.teddybear.parse.ParseConstants;
 import com.priest.teddybear.parse.ParseFriendList;
 
@@ -74,16 +74,12 @@ public class MainLoginActivity extends Activity {
         loginEmailEditText = (EditText) findViewById(R.id.loginactivity_main_login_email_et);
         loginPwdEditText = (EditText) findViewById(R.id.loginactivity_main_login_password_et);
 
-        TextView testtest = (TextView) findViewById(R.id.testIdTESTTEST);
-
         profilePhotoImageView = (ImageView) findViewById(R.id.profilePhotoImageView);
 
         if(ParseUser.getCurrentUser().getObjectId() == null){
             setLayoutVisibility(LOGIN_LAYOUT);
         }else{
-            parseUser = ParseUser.getCurrentUser();
-            testtest.setText(parseUser.getEmail());
-            setLayoutVisibility(LOGOUT_LAYOUT);
+            transitionToLobby();
         }
     }
 
@@ -268,8 +264,8 @@ public class MainLoginActivity extends Activity {
     }
 
     public void transitionToLobby(){
-        Intent menuIntent = new Intent(this, Lobby.class);
-        startActivity(menuIntent);
+        Intent intent = new Intent(this, NavDrawerFragmentActivity.class);
+        startActivity(intent);
     }
 
     public void setLayoutVisibility(int visibleLayout){

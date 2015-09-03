@@ -9,6 +9,7 @@ import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.priest.teddybear.R;
 
 import java.io.ByteArrayOutputStream;
 
@@ -76,35 +77,37 @@ public class ParseImage {
         return null;
     }
 
-    public static Bitmap retrieveImage(final ImageView imageView, ParseUser user) {
-
+    public static void retrieveImage(final ImageView imageView, ParseUser user, GetDataCallback callback) {
         ParseFile profilePhoto = (ParseFile) user.get(ParseConstants.USER_CLASS_ATTRIBUTE_PROFILE_PICTURE);
         profilePhoto.getDataInBackground(new GetDataCallback() {
             public void done(byte[] data, ParseException e) {
-                if (e == null) {
-                    Bitmap bMap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                    imageView.setImageBitmap(bMap);
+                if (e == null && data != null) {
+                    if(imageView != null) {
+                        Bitmap bMap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                        imageView.setImageBitmap(bMap);
+                    }
                 } else {
-                    // something went wrong
+                    System.out.println(e.getMessage());
                 }
             }
         });
-
-        return null;
     }
 
     public static Bitmap retrieveImage(final ImageView imageView, ParseFile file) {
-
-        file.getDataInBackground(new GetDataCallback() {
-            public void done(byte[] data, ParseException e) {
-                if (e == null) {
-                    Bitmap bMap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                    imageView.setImageBitmap(bMap);
-                } else {
-                    // something went wrong
+        if(file != null) {
+            file.getDataInBackground(new GetDataCallback() {
+                public void done(byte[] data, ParseException e) {
+                    if (e == null) {
+                        Bitmap bMap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                        imageView.setImageBitmap(bMap);
+                    } else {
+                        // something went wrong
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            imageView.setImageResource(R.drawable.generic_avatar);
+        }
 
         return null;
     }

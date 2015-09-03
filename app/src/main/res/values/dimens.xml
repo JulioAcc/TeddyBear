@@ -16,4 +16,10 @@
     <dimen name="loginactivity_main_button_hmargin">10dp</dimen>
 
     <dimen name="loginactivity_main_forgotpwd_vmargin">10dp</dimen>
+
+    <!-- FriendLayout.java -->
+    <dimen name="friend_layout_textsize">10dp</dimen>
+    <dimen name="friend_layout_avatar_height">66dp</dimen>
+    <dimen name="friend_layout_avatar_width">100dp</dimen>
+
 </resources>

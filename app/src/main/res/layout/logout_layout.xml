@@ -8,7 +8,6 @@
     android:id="@+id/loginactivity_main_logout_layout">
 
     <TextView
-        android:id="@+id/testIdTESTTEST"
         android:layout_width="190dp"
         android:layout_height="wrap_content"
         android:text="You're logged in as "

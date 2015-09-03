@@ -23,4 +23,30 @@
     <string name="loginactivity_main_signup_fail_valid_name">Names can only have letters, dots and underlines.</string>
     <string name="loginactivity_main_signup_successful">Sign up successful!</string>
     <string name="loginactivity_main_signup_failed_parse">Sign up failed. Please try again.</string>
+
+    <!-- Navigation Drawer Activity-->
+    <string-array name="drawer_titles">
+        <item >Lobby</item>
+        <item >Create game</item>
+        <item >Friends</item>
+        <item >Teddy bears</item>
+        <item >Account</item>
+    </string-array>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <!-- Lobby.java -->
+
+    <string name="lobby_main_title">Lobby</string>
+
+    <string name="lobby_explist_public_games">Public games</string>
+    <string name="lobby_explist_private_games">Private games</string>
+    <string name="lobby_explist_friends_games">Friends games</string>
+
+    <!-- FriendLayout.java -->
+    <string name="friend_layout_add_button">Add</string>
+    <string name="friend_layout_online_status">Online</string>
+    <string name="friend_layout_offline_status">Offline</string>
+
 </resources>
