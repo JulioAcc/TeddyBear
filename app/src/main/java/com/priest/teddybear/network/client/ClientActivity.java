@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.priest.teddybear.R;
 
-public class ClientActivity extends Activity {
+public class  ClientActivity extends Activity {
 
     TextView textResponse;
     EditText editTextAddress, editTextPort;

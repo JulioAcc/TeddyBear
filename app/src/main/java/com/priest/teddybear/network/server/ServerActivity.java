@@ -63,7 +63,7 @@ public class ServerActivity extends Activity {
 
                     @Override
                     public void run() {
-                        info.setText("I'm waiting here: "
+                        info.setText("Esperando en: "
                                 + serverSocket.getLocalPort());
                     }
                 });
@@ -71,7 +71,7 @@ public class ServerActivity extends Activity {
                 while (true) {
                     Socket socket = serverSocket.accept();
                     count++;
-                    message += "#" + count + " from " + socket.getInetAddress()
+                    message += "#" + count + " desde " + socket.getInetAddress()
                             + ":" + socket.getPort() + "\n";
 
                     ServerActivity.this.runOnUiThread(new Runnable() {
@@ -108,7 +108,7 @@ public class ServerActivity extends Activity {
         @Override
         public void run() {
             OutputStream outputStream;
-            String msgReply = "Hello from Android, you are #" + cnt;
+            String msgReply = "Sos el numero #" + cnt;
 
             try {
                 outputStream = hostThreadSocket.getOutputStream();
@@ -116,7 +116,7 @@ public class ServerActivity extends Activity {
                 printStream.print(msgReply);
                 printStream.close();
 
-                message += "replayed: " + msgReply + "\n";
+                message += "-> : " + msgReply + "\n";
 
                 ServerActivity.this.runOnUiThread(new Runnable() {
 
@@ -129,7 +129,7 @@ public class ServerActivity extends Activity {
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-                message += "Something wrong! " + e.toString() + "\n";
+                message += "Algo salio mal! " + e.toString() + "\n";
             }
 
             ServerActivity.this.runOnUiThread(new Runnable() {
@@ -168,7 +168,7 @@ public class ServerActivity extends Activity {
         } catch (SocketException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            ip += "Something Wrong! " + e.toString() + "\n";
+            ip += "Algo salio mal! " + e.toString() + "\n";
         }
 
         return ip;

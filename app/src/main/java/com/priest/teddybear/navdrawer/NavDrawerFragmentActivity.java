@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -34,6 +35,8 @@ import com.priest.teddybear.friends.FriendsListFragment;
 import com.priest.teddybear.game.factory.CreateGameFragment;
 import com.priest.teddybear.lobby.LobbyFragment;
 import com.priest.teddybear.login.MainLoginActivity;
+import com.priest.teddybear.network.client.ClientActivity;
+import com.priest.teddybear.network.server.ServerActivity;
 import com.priest.teddybear.parse.ParseConstants;
 import com.priest.teddybear.settings.AccountSettingsFragment;
 
@@ -225,6 +228,17 @@ public class NavDrawerFragmentActivity extends FragmentActivity {
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         // Start the Intent
         startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
+    }
+
+    public void createGameSession(View v){
+        Intent intent = new Intent(this, ServerActivity.class);
+        startActivity(intent);
+    }
+
+
+    public void joinGameSession(View v){
+        Intent intent = new Intent(this, ClientActivity.class);
+        startActivity(intent);
     }
 
     @Override
